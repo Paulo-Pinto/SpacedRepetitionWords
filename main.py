@@ -36,7 +36,7 @@ def retireWord():
     return 0
 
 
-def flow():
+if __name__ == '__main__':
     print("Welcome to Spaced Repetition!\nGuess 'X' to leave")
 
     # stores file content in list
@@ -81,9 +81,7 @@ def flow():
                 streak = 0
 
     print("\nYou got " + str(correctGuesses) + " correct guesses and " + str(wrongGuesses) + " wrong guesses.\n"
-                                                                                 "Best streak: " + str(bestStreak))
+                                                                                             "Best streak: " + str(
+        bestStreak))
     # writes the list back into the file, maintaining the new order
     writeFile(words)
-
-
-flow()
