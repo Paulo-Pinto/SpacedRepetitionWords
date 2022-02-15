@@ -1,16 +1,18 @@
+# -*- coding: utf-8 -*-
+
 # if you need more words https://www.sketchengine.eu/german-word-list/#tab-id-6
 from random import randrange
 
 
 def readFile():
     # creates list of words
-    with open('words/1000words') as fp:
+    with open('words/1000words', encoding="utf-8") as fp:
         return list((x.split()[0], x.split()[1]) for x in fp.readlines())
 
 
 def writeFile(words):
     # writes the list back to the file, to maintain the Spaced Repetition Time order!
-    with open('words/1000words', 'w') as filehandle:
+    with open('words/1000words', 'w', encoding="utf-8") as filehandle:
         filehandle.writelines("%s %s\n" % (word[0], word[1]) for word in words)
     print("File updated")
 
@@ -52,9 +54,8 @@ if __name__ == '__main__':
     while 1:
         # get first word from list
         word = words[0]
-
         # get user input
-        guess = input("\n" + word[0] + " | ")
+        guess = input(u"\n" + word[0] + " | ")
 
         # check guess
         # X -> leave loop
@@ -85,3 +86,8 @@ if __name__ == '__main__':
         bestStreak))
     # writes the list back into the file, maintaining the new order
     writeFile(words)
+
+
+# TODO :
+# random word order
+# words have multiple meanings
