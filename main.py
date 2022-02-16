@@ -29,14 +29,13 @@ def shuffleWord(final, words):
 
     if final:
         words.append(word)
-        print("Correct, " + str(word))
     else:
+        # spaced repetition
         rand = randrange(15, 50) / 100
         size = words.__sizeof__()
         index = int(size * rand)
         words.insert(index, word)
 
-        print("Wrong, the answer was " + str(word[1]))
 
     return 0
 
@@ -170,13 +169,12 @@ def checkGuess(user_guess, word):
     if user_guess == "?":
         print(f"Answer was {word[1]}")
         return False
-
     else:
-        # correct guess
         if user_guess.lower() == word[1].lower():
+            print("Correct, " + str(word))
             return True
-
         else:
+            print("Wrong, the answer was " + str(word[1]))
             return False
 
 
