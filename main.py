@@ -162,9 +162,6 @@ def spacedRepetition(words):
 
 
 def checkGuess(user_guess, word):
-    # TODO: Not sure how needed this is
-    # remove from original file and store in retired file
-
     # Show answer
     if user_guess == "?":
         print(f"Answer was {word[1]}")
