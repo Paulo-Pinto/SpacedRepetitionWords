@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # if you need more words https://www.sketchengine.eu/german-word-list/#tab-id-6
+from functools import partial
 from random import randrange
 from translate import Translator
 
@@ -36,7 +37,6 @@ def shuffleWord(final, words):
         index = int(size * rand)
         words.insert(index, word)
 
-
     return 0
 
 
@@ -50,13 +50,24 @@ def menu():
 Choose: """
 
 
-def menu_1():
+def menuChooseGame():
     return """
     0 - all
     1 - nouns
     2 - adjectives
     3 - adverbs
     4 - verbs
+
+Choose: """
+
+
+def menuChooseScoreboard():
+    return """
+        1 - Longest Streak
+        2 - Shortest Streak
+        3 - Highest Win/Loss Ratio
+        4 - Lowest Win/Loss Ratio
+        0 - Back
 
 Choose: """
 
@@ -95,11 +106,11 @@ def eternalGuess(words):
         if result:
             streak += 1
             correct_guesses += 1
-            print(f"Correct! {streak} Streak")
+            print(f"{streak} Streak")
         else:
+            print(f"Lost streak of {streak}")
             streak = 0
             wrong_guesses += 1
-            print(f"Incorrect... Lost streak of {streak}")
 
         # shuffle back word, based on the result of the guess
         shuffleWord(result, words)
@@ -142,11 +153,11 @@ def spacedRepetition(words):
         if result:
             streak += 1
             correct_guesses += 1
-            print(f"Correct! {streak} Streak")
+            print(f"{streak} Streak")
         else:
+            print(f"Lost streak of {streak}")
             streak = 0
             wrong_guesses += 1
-            print(f"Incorrect... Lost streak of {streak}")
 
         # shuffle back word, based on the result of the guess
         shuffleWord(result, words)
@@ -171,6 +182,13 @@ def checkGuess(user_guess, word):
             print("Correct, " + str(word))
             return True
         else:
+            # TODO : translation is taking too long
+            # translated = translator.translate(str(word[0]))
+            # if user_guess.lower() == translated.lower():
+            #       print("Correct, " + translated)
+            #       return true
+            # else:
+
             print("Wrong, the answer was " + str(word[1]))
             return False
 
@@ -189,21 +207,45 @@ def changeLang():
     translator = Translator(from_lang=from_lang, to_lang=to_lang)
 
 
+def showScoreboard(sort="descending", method="streak"):
+    print(sort, method)
+    print("*\t*\t*\t*\t*\tScoreboard\t*\t*\t*\t*\t*\n")
+    print(f"| {'':>16}Name | Best Streak | Win/Loss |")
+
+    # name, best streak, w/l
+    ficticious = {
+        0: ["Jon Michel", 15, 66.6],
+        1: ["Vincent Aboubakar", 3, 33.3],
+        2: ["Moussa Marega", 20, 80.0],
+        3: ["Mista", 4, 44.6],
+    }
+
+    # TODO : make this a file
+    # TODO : sort by biggest score or w/l
+    for fake_key in ficticious.keys():
+        fake = ficticious[fake_key]
+        # im sure theres an easier way to do this...
+        print(f"| {fake[0]:>{abs(20)}} | {'':<5}{fake[1]:02}{'':>4} | {'':<2}{fake[2]:.1f}{'':>2} |")
+
+    print("")
+    print("\n")
+
+
 if __name__ == '__main__':
     print("Welcome to Spaced Repetition!")
 
     # := assigns
     while (choice := input(menu())) != "0":
         if choice == "1":
-            while (choice_1 := input(menu_1())) not in ["0", "1", "2", "3", "4"]:
+            while (choice_game := input(menuChooseGame())) not in ["0", "1", "2", "3", "4"]:
                 print("Choose between 0 and 5")
 
-            data = getWords({"0": "all",
-                             "1": "nouns",
-                             "2": "adjectives",
-                             "3": "adverbs",
-                             "4": "verbs", }[choice_1])
-            eternalGuess(data)
+            chosen_game = getWords({"0": "all",
+                                    "1": "nouns",
+                                    "2": "adjectives",
+                                    "3": "adverbs",
+                                    "4": "verbs", }[choice_game])
+            eternalGuess(chosen_game)
 
         if choice == "2":
             print("Endless Random Play")
@@ -211,7 +253,24 @@ if __name__ == '__main__':
             print("Choose Languages")
             changeLang()
         if choice == "4":
-            # showScoreboard()
+            while (choice_scoreboard := input(menuChooseScoreboard())) not in ["0", "1", "2", "3", "4"]:
+                print("Choose between 0 and 4")
+
+            if choice_scoreboard == "0":
+                continue
+
+            arguments = {"1": ("descending", "streak"),
+                         "2": ("ascending", "streak"),
+                         "3": ("descending", "wlratio"),
+                         "4": ("ascending", "wlratio")}
+
+            # partial object adds arguments when called
+            chosen_scoreboard = partial(showScoreboard, arguments[choice_scoreboard])
+            chosen_scoreboard()
+
+            # this could simply be
+            # showScoreboard(arguments[choice_scoreboard])
+            # but it wouldn't be as fun :)
             pass
 
 # TODO : Implement translation
