@@ -8,7 +8,6 @@ from translate import Translator
 # global
 translator = Translator(from_lang="de", to_lang="en")
 
-
 def getWords(segment):
     if segment == "all":
         with open('words/1000words', encoding="utf-8") as fp:
@@ -194,6 +193,7 @@ def checkGuess(user_guess, word):
 
 
 def changeLang():
+    global translator
     valid_langs = ["en", "de", "pt", "es"]
     print(f"Available Languages:")
     print(*valid_langs)
@@ -220,14 +220,11 @@ def showScoreboard(sort="descending", method="streak"):
         3: ["Mista", 4, 44.6],
     }
 
-    # TODO : make this a file
-    # TODO : sort by biggest score or w/l
     for fake_key in ficticious.keys():
         fake = ficticious[fake_key]
         # im sure theres an easier way to do this...
         print(f"| {fake[0]:>{abs(20)}} | {'':<5}{fake[1]:02}{'':>4} | {'':<2}{fake[2]:.1f}{'':>2} |")
 
-    print("")
     print("\n")
 
 
@@ -288,3 +285,6 @@ if __name__ == '__main__':
 # translation
 # words have multiple meanings
 # sentences / expressions
+
+# TODO :
+# multiple files
